@@ -17,10 +17,19 @@ class GPReg(object):
         return kernel
 
 
-    def mean_post_infer(self, K_star, y):
-        return K_star.dot(np.linalg.inv(self.K)).dot(y)
+    def mean_post_infer(self, K_star):
+        return K_star.dot(np.linalg.inv(self.K)).dot(self.y)
 
-    def covar_post_infer(self, K_star_star, K_star, K):
+    def covar_post_infer(self, K_star, K_star_star):
         return K_star_star - K_star.dot(np.linalg.inv(self.K)).K_star.T
+
+
+    def predict(self, x_star, y_star):
+        K_star_star = self.kfunc(x_star, x_star)
+        K_star = np.matrix([self.kfunc(x, x_star) for x in self.X])
+        mu_post = self.mean_post_infer(K_star)
+        covar_post = self.covar_post_infer(K_star, K_star_star)
+        return mu_post, covar_post
+    
 
 
