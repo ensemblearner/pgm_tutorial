@@ -12,6 +12,7 @@ class GPReg(object):
 
     def compute_K(self):
         kernel = np.zeros((self.m, self.m))
+
         for i, row in enumerate(self.X):
             for j, ele in enumerate(row):
                 for k, ele_2 in enumerate(row):
