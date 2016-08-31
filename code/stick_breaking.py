@@ -21,12 +21,12 @@ class StickBreaking(object):
         thetas = np.random.normal(0, 1, self.k)
         return thetas
 
-    def generate_G(self):
+    def dp(self):
         #G = sum(pi*delta)
-        xs = np.random.multinomial(self.k, self.pis)
-        dp_clusters = self.H[xs]
-        counts = collections.Counter(dp_clusters).values()
-        plt.bar(set(dp_clusters), counts, width=0.01)
+        xs = np.random.choice(self.H, size=self.k, p=self.pis)
+        counter = collections.Counter(xs).values()
+        plt.bar(set(xs), counter, width=0.01 )
+
         plt.title("dp via stick breaking")
         plt.xlabel("atom locations")
         plt.ylabel("atoms collided")
@@ -34,6 +34,14 @@ class StickBreaking(object):
 
 
 if __name__ == '__main__':
-
-    sb = StickBreaking(alpha=20, k=100)
-    sb.generate_G()
+    alpha = 100
+    k = 10000
+    sb = StickBreaking(alpha, k)
+    sb.dp()
+    # plot just stick breaks probs
+    pis = sb.pis
+    plt.bar(xrange(k), pis, width=0.01)
+    plt.xlabel("stick length")
+    plt.ylabel("prob")
+    plt.title("stick breaking")
+    plt.show()
